@@ -1,0 +1,39 @@
+version: '3'
+services:
+
+  niord-keycloak-mysql:
+    image: mysql:${MYSQL_VERSION:-8.0.22}
+    container_name: niord-keycloak-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-mysql}
+      MYSQL_USER: niordkc
+      MYSQL_PASSWORD: ${KCDB_PASSWORD:-niordkc}
+      MYSQL_DATABASE: niordkc
+    volumes:
+      - ${NIORD_KEYCLOAK_HOME:-~/.niord-keycloak}/mysql:/var/lib/mysql
+#    cap_add:
+#      - SYS_NICE  # Disables som mbind warnings
+      
+  niord-keycloak:
+    image: jboss/keycloak:${NIORD_KEYCLOAK_VERSION:-12.0.1}
+    container_name: niord-keycloak
+    restart: unless-stopped
+    volumes:
+      - ./niord-bootstrap-realm.json:/opt/jboss/keycloak/imports/niord-bootstrap-realm.json
+      - ./niord-theme:/opt/jboss/keycloak/themes/niord
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: niord-keycloak-mysql
+      DB_DATABASE: niordkc
+      DB_USER: niordkc
+      DB_PASSWORD: ${KCDB_PASSWORD:-niordkc}
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/niord-bootstrap-realm.json
+      KEYCLOAK_USER: user
+      KEYCLOAK_PASSWORD: admin
+    links:
+      - niord-keycloak-mysql:kcdb
+    depends_on:
+      - niord-keycloak-mysql
+    ports:
+      - "8090:8080"

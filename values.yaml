@@ -1,0 +1,37 @@
+# Default service type is LoadBalancer, override it with ClusterIP
+service:
+ type: ClusterIP
+
+# We install the Niord Theme by adding a simple container which have the binary files installed.
+# An alternative would be to put it into a ConfigMap as binary values
+initContainers:
+  - name: theme-provider
+    image: kaspernielsen/dma-niord-theme:latest
+    imagePullPolicy: IfNotPresent
+    command:
+      - sh
+    args:
+      - -c
+      - |
+        echo "Copying theme..."
+        cp -R /niord_theme/* /theme
+    volumeMounts:
+      - name: theme
+        mountPath: /theme
+
+extraVolumeMounts:
+  - name: theme
+    mountPath: /opt/bitnami/keycloak/themes/niord
+
+extraVolumes:
+  - name: theme
+    emptyDir: {}
+
+# We need to enable proxy address forwarding so Keycloak knows to
+# translate http->https
+proxyAddressForwarding: true
+
+# setup ingress
+ingress:
+  enabled: "true"
+  hostname: niord-keycloak-test.dma.govcloud.dk
