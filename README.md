@@ -20,7 +20,7 @@ This will create a Docker project called "niord-keycloak" with two containers ru
 
 It will also create a ~/.niord-keycloak on your computer. This is where MySql stores its data files.
 
-You can go to localhost:8090 and try and login to the mast realm with username/password "user"/"admin"
+You can go to localhost:8090 and try and login to the mast realm with username/password user/admin
 
 Docker compose also create a niord realm which is the realm that the niord application uses.
 A single user with password sysadmin/sysadmin is created.
