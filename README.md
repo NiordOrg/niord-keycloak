@@ -13,10 +13,10 @@ To startup a local keycloak instance you simply stand in this directory and run
 $ docker-compose up
 ```
 
-You will now have a Docker project called "niord-keycloak" with two containers running
+This will create a Docker project called "niord-keycloak" with two containers running:
 
-niord-keycloak: The actual Keycloak instance
-niord-mysql-keycloak: A database instance that Keycloak needs in order to run.
+- niord-keycloak: The actual Keycloak instance
+- niord-mysql-keycloak: A database instance that Keycloak needs in order to run.
 
 It will also create a ~/.niord-keycloak on your computer. This is where MySql stores its data files.
 
@@ -27,8 +27,7 @@ A single user with password sysadmin/sysadmin is created.
 
 ## Keycloak via Kubernetes+Helm
 
-Another alternative is to create a Keycloak instance using Kubernetes "package manager" Helm and a chart provided by Bitnami https://github.com/bitnami/charts/tree/master/bitnami/keycloak.
-This is typically what you want to do in production.
+Another alternative is to create a Keycloak instance using Kubernetes and a Helm chart provided by Bitnami https://github.com/bitnami/charts/tree/master/bitnami/keycloak.
 
 Assuming you have already installed Helm and access to a running K8s cluster (install minikube if you don't). You start by adding the bitnami chart registry:
 ```bash
@@ -36,6 +35,7 @@ $ helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
 
 And then install a Keycloak using the helm example values template we have provided. You will mostly need to update the ingress hostname in the yaml file.
+
 ```bash
 $ helm install keycloak --values helm-example-values.yaml bitnami/keycloak
 ```
