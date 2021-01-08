@@ -1,9 +1,9 @@
-# Default service type is LoadBalancer, override it with ClusterIP
+# Default service type is LoadBalancer, this overrides it with a ClusterIP
 service:
  type: ClusterIP
 
 # We install the Niord Theme by adding a simple container which have the binary files installed.
-# An alternative would be to put it into a ConfigMap as binary values
+# An alternative could be to put it into a ConfigMap as binary values
 initContainers:
   - name: theme-provider
     image: kaspernielsen/dma-niord-theme:latest
@@ -27,6 +27,10 @@ extraVolumes:
   - name: theme
     emptyDir: {}
 
+extraEnvVars:
+  - name: KEYCLOAK_LOG_LEVEL
+    value: DEBUG
+
 # We need to enable proxy address forwarding so Keycloak knows to
 # translate http->https
 proxyAddressForwarding: true
@@ -34,4 +38,10 @@ proxyAddressForwarding: true
 # setup ingress
 ingress:
   enabled: "true"
-  hostname: niord-keycloak-test.dma.govcloud.dk
+  hostname: keycloak.example.com
+
+# If you are running with a cert-manager you can uncomment the following
+#  annotations:
+#   cert-manager.io/cluster-issuer: "letsencrypt-staging"
+#  tls: true
+  

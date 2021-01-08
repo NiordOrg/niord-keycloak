@@ -1,34 +1,41 @@
 # niord-keycloak
 
-In order to use Niord you will need to have a running Keycloak instance as Niord requires it for user management. 
+In order to use Niord you will need to have a running Keycloak instance as Niord needs an instance for user management. 
 
-If you do not have a running Keycloak instance you can use. The easiest way to setup a local Keycloak is by using Docker Compose.
+The easiest way to setup a local Keycloak is by using Docker Compose. As we will describe in the next section.
+If you want to set up a production grade instance we will briefly touch upon it in the Keycloak+Helm section.
 
-## Running using Docker Compose
+## Keyclock via Docker Compose
 
-docker-compose up
+To startup a local keycloak instance you simply stand in this directory and run
+
+```bash
+$ docker-compose up
+```
 
 You will now have a Docker project called "niord-keycloak" with two containers running
 
-niord-keycloak The actual Keycloak instance
-niord-mysql-keycloak A database instance that Keycloak needs in order to run.
+niord-keycloak: The actual Keycloak instance
+niord-mysql-keycloak: A database instance that Keycloak needs in order to run.
 
-You can go to localhost:8090 and try and login with "user" "admin"
+It will also create a ~/.niord-keycloak on your computer. This is where MySql stores its data files.
 
-Will also install a Niord keycloak-theme and add the default niord domain
-The default niord user is sysadmin
+You can go to localhost:8090 and try and login to the mast realm with username/password "user"/"admin"
 
-Running will create ~/.niord-keycloak on your local computer. This is where mysql stores its datafiles
+Docker compose also create a niord realm which is the realm that the niord application uses.
+A single user with password sysadmin/sysadmin is created.
 
-## Running using Helm
+## Keycloak via Kubernetes+Helm
 
-Another alternative is to create a Keycloak instance using Kubernetes "package manager" Helm.
+Another alternative is to create a Keycloak instance using Kubernetes "package manager" Helm and a chart provided by Bitnami https://github.com/bitnami/charts/tree/master/bitnami/keycloak.
 This is typically what you want to do in production.
 
+Assuming you have already installed Helm and access to a running K8s cluster (install minikube if you don't). You start by adding the bitnami chart registry:
+```bash
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+```
 
-
-## Update Niord theme
-Install Niord theme
-
-// Backup
-https://cwienczek.com/2020/06/simple-backup-of-postgres-database-in-kubernetes/
+And then install a Keycloak using the helm example values template we have provided. You will mostly need to update the ingress hostname in the yaml file.
+```bash
+$ helm install keycloak --values helm-example-values.yaml bitnami/keycloak
+```
