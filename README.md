@@ -2,7 +2,7 @@
 
 In order to use Niord you will need to have a running Keycloak instance as Niord needs an instance for user management. 
 
-The easiest way to setup a local Keycloak is by using Docker Compose on your local computer as we will describe in the next section.
+The easiest way to setup a local Keycloak is by using Docker Compose as described in the next section.
 
 ## Keyclock via Docker Compose
 
@@ -17,12 +17,12 @@ This will create a Docker project called "niord-keycloak" with two containers ru
 - niord-keycloak: The actual Keycloak instance
 - niord-mysql-keycloak: A database instance that Keycloak needs in order to run.
 
-It will also create a ~/.niord-keycloak on your computer. This is where MySql stores its data files.
+This also creates a ~/.niord-keycloak directory on your computer where Keycloak maintains a MySql database.
 
-You can now go to localhost:8090 and try and login to the master realm with username/password user/admin
+You can now go to localhost:8090 and try and login to the master realm with (username/password) user/admin
 
-Docker compose also create a niord keycloak realm which is the realm that the niord application uses.
-A single user with password sysadmin/sysadmin is created. Which you can use to login when starting the Niord application.
+Docker compose creates a niord keycloak realm which is the realm that the niord application uses.
+A single user/password sysadmin/sysadmin is created. Use this when you login via the Niord application.
 
 ## Keycloak via Kubernetes+Helm
 
